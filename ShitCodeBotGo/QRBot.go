@@ -7,6 +7,7 @@ import (
 	"image/color"
 	"io/ioutil"
 	"log"
+	"os"
 )
 
 // /функция генерации QR кодов
@@ -16,6 +17,35 @@ func createQR(content string) {
 		fmt.Printf("Sorry couldn't create qrcode:,%v", err)
 	}
 }
+
+/// функции для логирования
+
+func CreateLogFile() {
+	f, err := os.OpenFile("text.log",
+		os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Println(err)
+	}
+	defer f.Close()
+	if _, err := f.WriteString("Start of logging... \n"); err != nil {
+		log.Println(err)
+	}
+}
+
+func LoggingData(logi string) {
+	f, err := os.OpenFile("text.log",
+		os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Println(err)
+	}
+	defer f.Close()
+
+	logger := log.New(f, "префикс: ", log.LstdFlags)
+	logger.Println(logi)
+
+}
+
+// /функции работы бота
 func WorkBot(tokens string) {
 	// подключаемся к боту с помощью токена
 	bot, err := tgbotapi.NewBotAPI(tokens)
@@ -23,6 +53,9 @@ func WorkBot(tokens string) {
 		log.Panic(err)
 	}
 	log.Printf("Authorized on account %s", bot.Self.UserName)
+
+	// cоздание файла с логами
+	CreateLogFile()
 
 	// u - структура с конфигом для получения апдейтов
 	u := tgbotapi.NewUpdate(0)
@@ -57,6 +90,7 @@ func WorkBot(tokens string) {
 		}
 
 		// логируем от кого какое сообщение пришло
+		LoggingData(string(update.Message.From.UserName + " " + update.Message.Text))
 		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
 		// свитч на обработку комманд
