@@ -35,8 +35,11 @@ func WorkBot(tokens string) {
 		if update.Message == nil {
 			continue
 		}
-		/// обработка сообщений
-		if update.Message.Text != " " && update.Message.Text != "/start" {
+		/// обработка сообщений ( запрещаем отправлять всякое в бот )
+		if update.Message.Photo != nil || update.Message.Sticker != nil || update.Message.Voice != nil || update.Message.Video != nil || update.Message.Audio != nil || update.Message.VideoNote != nil {
+			reply = " не умею с таким работать"
+		}
+		if update.Message.VideoNote == nil && update.Message.Audio == nil && update.Message.Video == nil && update.Message.Voice == nil && update.Message.Sticker == nil && update.Message.Photo == nil && update.Message.Text != " " && update.Message.Text != "/start" {
 			//createQR(update.Message.Text)
 			qr.CreateQR(update.Message.Text)
 			/// отправка png QR code
