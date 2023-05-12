@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-
+// https://metanit.com/go/tutorial/7.7.php - объяснение к работе с WaitGroup
 func main() {
 	urls := []string{ // урлы к которым нужно сделать запросы
 		"https://www.google.com/",
