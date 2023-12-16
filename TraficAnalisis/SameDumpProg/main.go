@@ -64,7 +64,7 @@ func ProgrammStart(iface string, fname string) {
 		// Записываем пакет в файл pcap
 		err := writer.WritePacket(packet.Metadata().CaptureInfo, packet.Data())
 		if err != nil {
-			log.Fatal(err)
+			slog.Error("error write packet ",err)
 		}
 		fmt.Println("Packet captured and written to pcap file")
 	}
